@@ -47,7 +47,7 @@ code circleci/config.yml
 
 Now you can open this folder up in your editor and start the exercise.
 
-- Each lesson will provide an exercise will contain a .circleci/config.yml that will need to be edited to pass the exercise.
+- Each lesson contains a `.circleci/config.yml` file that will need to be edited to pass the exercise.
 - Each lesson (except the last) will contain the solution of the last in case you get stuck. Its highly recommended that you try and work through the exercise and ask for help during the workshop.
 
 ## Post Workshop Takeaways
