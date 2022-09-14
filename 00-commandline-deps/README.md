@@ -31,7 +31,12 @@ https://www.tomshardware.com/how-to/write-bash-scripts-linux
 1. cat
 2. echo
 3. cd
-4. TODO
+4. ssh (with tunnelling included)
+5. rsync
+6. aws
+7. docker
+8. ssh-keygen
+
 ### Common Building Tools
 1. yarn
 2. npm
