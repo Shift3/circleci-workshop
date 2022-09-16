@@ -6,7 +6,7 @@ skills to use and apply workflows to automate the three most common workflows wi
 
 ## Skill Level
 
-This workshop will be presenting fundamentals.
+This workshop will be presenting Intermediate tools and requires some level of experience with the command line.
 
 - [ ] Fundamentals
 - [x] Intermediate
@@ -29,6 +29,7 @@ some other helpful tools.
 Fork this repo and start with the instructions on `01-hello-world` folder.
 
 Lessons:
+00 - Command Line (Optional)
 01 - Hello world
 02 - Build Workflow
 03 - Test Workflow
