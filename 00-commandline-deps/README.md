@@ -36,6 +36,9 @@ https://www.tomshardware.com/how-to/write-bash-scripts-linux
 6. aws
 7. docker
 8. ssh-keygen
+9. jq
+10. grep
+11. ps
 
 ### Common Building Tools
 1. yarn
