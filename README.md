@@ -29,11 +29,11 @@ some other helpful tools.
 Fork this repo and start with the instructions on `01-hello-world` folder.
 
 Lessons:
-00 - Command Line (Optional)
-01 - Hello world
-02 - Build Workflow
-03 - Test Workflow
-04 - Production Workflow
+* 00 - [Command Line (Optional)](https://github.com/Shift3/circleci-workshop/tree/main/00-commandline-deps)
+* 01 - [Hello World](https://github.com/Shift3/circleci-workshop/tree/main/01-hello-world)
+* 02 - Build Workflow
+* 03 - Test Workflow
+* 04 - Production Workflow
 
 The exercises are numbered, the first one is `01-hello world`, you will `cd`
 into that directory in your terminal and can run the test file at any time.
