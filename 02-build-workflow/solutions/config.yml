@@ -1,0 +1,23 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: cimg/node:14.10.1 # the primary container, where your job's commands are run
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout # check out the code in the project directory
+      - run:
+          name: Build Dependencies and Application
+          command: |-
+            cd sample-app
+            npm install
+            npm run build
+
+
+workflows:
+  version: 2
+  builds:
+    jobs:
+      - build
