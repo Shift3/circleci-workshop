@@ -1,7 +1,7 @@
 # Command Line - A primer
 Bitwise Consulting - Circleci Workshop
 
-This workshop will focus on the basics behind the command line. For ease of use, we will be assuming you have a Mac OS system provided by Bitwise.
+This workshop will focus on the basics behind the command line. For ease of use, we will be assuming you have a Mac OS system provided by Bitwise. If developers have a way to build, test, and deploy an application using the command line, then you can create a script around it and deploy it as part of a working CI/CD script.
 
 `telnet towel.blinkenlights.nl`
 
@@ -9,7 +9,7 @@ This workshop will focus on the basics behind the command line. For ease of use,
 
 `bastet`
 
-
+`ssh sshtron.zachlatta.com`
 ## Prerequisites
  - Open your terminal.
 - Install [Shift3 Laptop setup
@@ -72,7 +72,9 @@ Assignment:
 11. ssh-keygen
 12. jq
 13. grep
-14. ps
+14. awk
+15. ps
+16. kill
 
 ### Common Building Tools
 1. yarn
@@ -111,5 +113,8 @@ https://circleci.com/docs/how-to-use-the-circleci-local-cli#running-a-job
 
 
 ## Post Workshop Takeaways
-Everyone here should be able to run a bash script.  
+Everyone here should be able to run a bash script.
 They should also be able to run a CircleCI Script locally.
+
+If you would like to learn more about the command line and how to program in it:
+* https://opensource.com/article/19/10/programming-bash-syntax-tools
