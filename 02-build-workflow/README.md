@@ -66,3 +66,10 @@ If you ever want to test multiple versions of different libraries, programing la
 
 Some applications MUST work on multiple versions or dfferent libraries. When this occurs, we should create workflows and try to target as many of these tools, libraries, and lanugages as possible. Example: https://github.com/Shift3/terraform-modules/blob/main/.circleci/config.yml
 
+## Assignment
+This assignment should take you a couple of hours. It will go over your knowledge of building a circleci script based on known build instructions. Please reach out if you have any questions.
+
+1. Create a Github repo within your own GH profile.
+2. Add Circleci to the repo. Start with `../01/hello-world/.circleci`.
+3. Create an Angular project called `sample-app`. Hint: Take a look here: https://angular.io/cli
+4. Set up your CircleCI project to build the angular app based on this excercise.
