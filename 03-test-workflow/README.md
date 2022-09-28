@@ -40,7 +40,7 @@ workflows:
 ```
 2. Create a test workflow by copy/pasting everything from `build:` to `npm run build` on the steps. 
 3. On the workflows, modify your workflow name `builds` to `build-and-test`.
-4. On the worklow jobs, add `- test` to the last line. 
+4. At the end of the file, navigate to the end of the file to `workflows` -> `builds` -> `jobs`, add `- test` to the last line. 
 5. Verify your version of the circleci script is runnable via `circleci config validate`. You should get a `Config file at .circleci/config.yml is valid.` message. 
 6. Try and run your new workflow via `circleci local execute --job test`. It should be successful. 
 
@@ -118,11 +118,16 @@ You can also set up the path that the CircleCI script runs under. This is done v
 With this, we can remove all our `cd` commands from our jobs and still have the same operations occur.
 
 ## Assignment
-This assignment should take you a couple of hours. It will go over your knowledge of testing a circleci script based on known test instructions. Please reach out if you have any questions.
+This assignment should take you a couple of hours. It will go over your knowledge of building and testing a circleci script based on known instructions. Please reach out if you have any questions.
 
-1. Use your angular app you created in the last exercise. 
-2. Add a test workflow to the project. Hint, take a look here: https://angular.io/guide/testing
+1. Create a new repository in your personal GitHub Account. Call it Angular-CICD-Workshop
+2. Clone the repo onto your local machine.
+3. Create the Angular app by installing Angular cli: `npm i -g @angular/cli` then running `ng new angular-app`.
+4. Create a working build (Hint, look at the build workflow in the last workshop! IT should look familiar)
+5. Add a test workflow to the project. Hint, take a look here: https://angular.io/guide/testing
 
 Extra credit:
 1. Create a cache for dependencies.
 2. Create a working_directory and remove all `cd` commands.
+
+Next time, we will go over the assignment in detail and see the differences in each repo. 
