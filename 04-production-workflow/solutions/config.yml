@@ -1,0 +1,71 @@
+version: 2.1
+jobs:
+  build:
+    working_directory: ~/repo/sample-app
+    docker:
+      - image: cimg/node:14.10.1 # the primary container, where your job's commands are run
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout: # check out the code in the project directory
+          path: ~/repo/
+      # look for existing cache and restore if found
+      - restore_cache:
+          key: v1-deps-{{ checksum "package-lock.json" }}
+      # install dependencies    
+      - run:
+          name: install dependencies
+          command: npm install
+      # save any changes to the cache
+      - save_cache:
+          key: v1-deps-{{ checksum "package-lock.json" }}
+          paths: 
+            - node_modules
+      - run:
+          name: Build Application
+          command: |-
+            npm run build
+  test:
+    working_directory: ~/repo/sample-app
+    docker:
+      - image: cimg/node:14.10.1 # the primary container, where your job's commands are run
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout: # check out the code in the project directory
+          path: ~/repo/
+      # look for existing cache and restore if found
+      - restore_cache:
+          key: v1-deps-{{ checksum "package-lock.json" }}
+      # install dependencies    
+      - run:
+          name: install dependencies
+          command: npm install
+      # save any changes to the cache
+      - save_cache:
+          key: v1-deps-{{ checksum "package-lock.json" }}
+          paths: 
+            - node_modules
+      - run:
+          name: Test Application
+          command: |-
+            npm run test
+    deploy_application:
+      jobs:
+        - aws-code-deploy/deploy:
+            application-name: myApplication
+            bundle-bucket: myApplicationS3Bucket
+            bundle-key: myS3BucketKey
+            deployment-group: myDeploymentGroup
+            service-role-arn: myDeploymentGroupRoleARN
+
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build
+      - test
+      - deploy_application

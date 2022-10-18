@@ -33,7 +33,7 @@ Lessons:
 * 01 - [Hello World](https://github.com/Shift3/circleci-workshop/tree/main/01-hello-world)
 * 02 - [Build Workflow](https://github.com/Shift3/circleci-workshop/tree/main/02-build-workflow)
 * 03 - [Test Workflow](https://github.com/Shift3/circleci-workshop/tree/main/03-test-workflow)
-* 04 - Production Workflow
+* 04 - [Production Workflow](https://github.com/Shift3/circleci-workshop/tree/main/04-production-workflow)
 
 The exercises are numbered, the first one is `01-hello world`, you will `cd`
 into that directory in your terminal and can run the test file at any time.
