@@ -10,7 +10,7 @@ In order for a production workflow to be successful, it needs two things:
 1. The infrastructure to deploy the code (IE Terraform/AWS)
 2. A working build and test workflow.
 
-Production workflows are highly dependent upon what tools developers are using to deploy the application and what existing infrastructure is available to them. 
+Production workflows are highly dependent upon what tools developers are using to deploy the application and what existing infrastructure is available to them.
 
 ## Best practices regarding Production/Deploy Workflows
 Circleci has documentation on how to deploy using AWS and an existing app: https://circleci.com/docs/deploy-to-aws/ we will go through this briefly. There are many different ways to deploy, so the rule of thumb is to match the current infrastructure the developers are using. 
@@ -18,11 +18,17 @@ Circleci has documentation on how to deploy using AWS and an existing app: https
 Don't commit keys or API tokens when creating your production workflow.
 
 ## Looking at Existing Production Workflows
-
+1. [React Boilerplate](https://github.com/Shift3/boilerplate-client-react)
+2. [Node Boilerplate](https://github.com/Shift3/boilerplate-server-node)
+3. [Django Boilerplate](https://github.com/Shift3/dj-starter)
+4. [kidskare-api](https://github.com/Shift3/kidskare-api/blob/development/.circleci/config.yml)
+5. [kidscare-admin](https://github.com/Shift3/kidskare-admin/blob/development/.circleci/config.yml)
+6. [porterville-cms-client](https://github.com/Shift3/porterville-cms-client)
+7. [porterville-cms-server](https://github.com/Shift3/porterville-cms-server)
 
 
 ## Creating a Deploy Workflow
-In our last workshop, we created a test workflow. In this workshop, we shall modify it and create a deploy workflow to run alongside the build and test workflows. We will again be adding more Quality of life changes to the existing workflows in order to both speed up our overall script and to utilize CircleCI specific features.
+In our last workshop, we created a test workflow. In this workshop, we shall modify it and create a deploy workflow to run alongside the build and test workflows. Because of cost, this will not go out to our sandbox just yet. We will again be adding more Quality of life changes to the existing workflows in order to both speed up our overall script and to utilize CircleCI specific features.
 
 1. Add the following job after the test job to your `.circleci/config.yml`:
 ```
@@ -35,16 +41,16 @@ In our last workshop, we created a test workflow. In this workshop, we shall mod
             deployment-group: myDeploymentGroup
             service-role-arn: myDeploymentGroupRoleARN
 ```
-2. Create a test workflow by copy/pasting everything from `build:` to `npm run build` on the steps. 
+2. Create a test workflow by copy/pasting everything from `build:` to `npm run build` on the steps.
 3. On the workflows, modify your workflow name `builds` to `build-and-test`.
-4. At the end of the file, navigate to the end of the file to `workflows` -> `builds` -> `jobs`, add `- test` to the last line. 
-5. Verify your version of the circleci script is runnable via `circleci config validate`. You should get a `Config file at .circleci/config.yml is valid.` message. 
-6. Try and run your new workflow via `circleci local execute --job test`. It should be successful. 
+4. At the end of the file, navigate to the end of the file to `workflows` -> `builds` -> `jobs`, add `- test` to the last line.
+5. Verify your version of the circleci script is runnable via `circleci config validate`. You should get a `Config file at .circleci/config.yml is valid.` message.
+6. Try and run your new workflow via `circleci local execute --job test`. It should be successful.
 
 
 ### Modify Test workflow to test the application
 
-Take a look at the sample-app/README.md file. The README tells us how our developers are testing their application. We should always try and match how our developers test their app with the CircleCI script to give them the most value out of their CI/CD processes. 
+Take a look at the sample-app/README.md file. The README tells us how our developers are testing their application. We should always try and match how our developers test their app with the CircleCI script to give them the most value out of their CI/CD processes.
 
 Lets modify our test workflow to more accurately mirror what is in the README.
 
@@ -55,3 +61,15 @@ Lets modify our test workflow to more accurately mirror what is in the README.
 
 
 ## Assignment
+1. Take a look at the node boilerplate and how its deployed.
+2. Come prepared to answer the following questions in our next workshop:
+
+   * What are we caching and why are we caching those resources?
+   * What tools are we using to deploy the project?
+   * How can we improve our current deployment process?
+   * What is the first step in finding out how to deploy a new project from scratch (IE without a pre-made deploy script/process)?
+
+Extra credit:
+1. Fork the [node boilerplate](https://github.com/Shift3/boilerplate-server-node).
+2. Rename the project to yourname-node-boilerplate
+3. Create the infrastructure using our existing terraform and our deploy script.
