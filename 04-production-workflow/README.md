@@ -46,11 +46,9 @@ In our last workshop, we created a test workflow. In this workshop, we shall mod
             deployment-group: myDeploymentGroup
             service-role-arn: myDeploymentGroupRoleARN
 ```
-2. Create a test workflow by copy/pasting everything from `build:` to `npm run build` on the steps.
-3. On the workflows, modify your workflow name `builds` to `build-and-test`.
-4. At the end of the file, navigate to the end of the file to `workflows` -> `builds` -> `jobs`, add `- test` to the last line.
-5. Verify your version of the circleci script is runnable via `circleci config validate`. You should get a `Config file at .circleci/config.yml is valid.` message.
-6. Try and run your new workflow via `circleci local execute --job test`. It should be successful.
+2. Create a deploy workflow by copy/pasting everything from `build:` to `npm run build` on the steps.
+3. At the end of the file, navigate to the end of the file to `workflows` -> `builds` -> `jobs`, add `- deploy` to the last line.
+4. Verify your version of the circleci script is runnable via `circleci config validate`. You should get a `Config file at .circleci/config.yml is valid.` message.
 
 
 ### Modify Test workflow to test the application

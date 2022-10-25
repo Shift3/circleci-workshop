@@ -52,7 +52,7 @@ jobs:
           name: Test Application
           command: |-
             npm run test
-    deploy_application:
+    deploy:
       jobs:
         - aws-code-deploy/deploy:
             application-name: myApplication
@@ -63,9 +63,16 @@ jobs:
 
 
 workflows:
-  version: 2
-  build-test-deploy:
+    version: 2
+    build-and-deploy:
     jobs:
-      - build
-      - test
-      - deploy_application
+        - build
+        - test:
+            requires:
+            - test
+        - deploy:
+            requires:
+            - build # only deploy once build job has completed
+            filters:
+            branches:
+                only: main # only deploy on the main branch
