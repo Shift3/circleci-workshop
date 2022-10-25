@@ -17,6 +17,11 @@ Circleci has documentation on how to deploy using AWS and an existing app: https
 
 Don't commit keys or API tokens when creating your production workflow.
 
+Take a look at [branching standards](https://github.com/Shift3/standards-and-practices/blob/main/standards/branching.md#branch-structure) in our S&P repo.
+Branching helps both developers and devops in knowing what is being deployed as well as triggering deployments. 
+
+In general, the `main` branch will contain whats in production, `development` will contain any sandboxed code, and `staging` will contain a feature that is client specific (or just staging deployment). This may not be universal throughout  all projects so you should ask to make sure before setting up the deployment.
+
 ## Looking at Existing Production Workflows
 1. [React Boilerplate](https://github.com/Shift3/boilerplate-client-react)
 2. [Node Boilerplate](https://github.com/Shift3/boilerplate-server-node)
