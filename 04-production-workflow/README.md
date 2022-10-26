@@ -37,31 +37,146 @@ In our last workshop, we created a test workflow. In this workshop, we shall mod
 
 1. Add the following job after the test job to your `.circleci/config.yml`:
 ```
-    deploy_application:
-      jobs:
-        - aws-code-deploy/deploy:
-            application-name: myApplication
-            bundle-bucket: myApplicationS3Bucket
-            bundle-key: myS3BucketKey
-            deployment-group: myDeploymentGroup
-            service-role-arn: myDeploymentGroupRoleARN
+  deploy:
+    docker: # Specify executor for running deploy job
+        - image: <docker-image-name-tag> # Specify docker image to use
+          auth:
+            username: mydockerhub-user
+            password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+        - run: # Install the AWS CLI if it is not already included in the docker image
+            name: Install awscli
+            command: sudo pip install awscli
+        - run: # Deploy to S3 using the sync command
+            name: Deploy to S3
+            command: aws s3 sync <path/to/bucket> <s3://location/in/S3-to-deploy-to>
 ```
 2. Create a deploy workflow by copy/pasting everything from `build:` to `npm run build` on the steps.
 3. At the end of the file, navigate to the end of the file to `workflows` -> `builds` -> `jobs`, add `- deploy` to the last line.
 4. Verify your version of the circleci script is runnable via `circleci config validate`. You should get a `Config file at .circleci/config.yml is valid.` message.
 
+### Advanced Workflows
 
-### Modify Test workflow to test the application
+#### Filters and Development 
 
-Take a look at the sample-app/README.md file. The README tells us how our developers are testing their application. We should always try and match how our developers test their app with the CircleCI script to give them the most value out of their CI/CD processes.
+In a normal everyday life of a developer, three branches are usually used to denote state within a project. 
+The `main` branch will usually contain production code thats made its way to the client. 
+The `development` branch will usually contain a sandbox that will be used for internal demos and easy to spin up/tear down environments. Usually its short lived as well. 
+The `staging` branch is typically used for QA or other teams to take a look at a semi-stable environment that is still safe to tear down. 
 
-Lets modify our test workflow to more accurately mirror what is in the README.
+In order to be useful, your CI/CD scripts should always attempt to follow the development cycle of our developers. The build/test/deploy process will be much easier to follow along and deploy the correct versions of applications in that manner. 
 
-1. Within test job, lets change the last line: `npm run build` to `npm test`.
-2. Run via `circleci local execute --job test`
-3. As it turns out, npm test will get stuck in "watch mode" AKA looking for changes for the developer. Since we have no way of interacting with a CI/CD script, we will need to make a workaround. Luckily the npm test script [has a workaround](https://create-react-app.dev/docs/running-tests/#linux-macos-bash) already built in. Modify the last line again to `CI=true npm test`.
-4. Application should run correctly.
+We want the script to do the following:
+1. Separate the PRs that do NOT need to be deployed and run the build/test jobs (So they can get near instant feedback on the components they are adding/removing). 
+2. Only run the `deploy` job when the `main` branch is updated.
 
+CircleCI allows us to `filter` an action based on what branch it is running under. See here for more info: https://circleci.com/docs/configuration-reference/#jobfilters 
+
+You can also use git tags to deploy: https://circleci.com/docs/workflows/#executing-workflows-for-a-git-tag
+
+Filters only work on jobs so you will have to add the filter to all jobs within a certain workflow. If you know of a wa to make this easier, let me know!
+
+For our example, we want to separate our main branch behavior (IE deploying the project only when the main branch is updated) from normal every-day behavior (build and test jobs). To do this:
+1. Copy/Paste the `build-and-test` workflow to the last line of the `config.yml` file.
+2. Create a new workflow by modifying our new `build-and-test` to `build-test-deploy`.
+3. Create a filter on the build workflow by replacing `- build` with:
+```yml
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+```
+3. Create a filter on the test workflow by replacing `- test:` with:
+```yml
+      - test:
+          filters:
+            branches:
+              only:
+                - main
+```
+4. Create a filter on the deploy workflow:
+```yml
+      - deploy:
+          filters:
+            branches:
+              only:
+                - main
+```
+run `circleci config validate` to make sure it works. 
+
+Your workflows should look like the following: 
+```yml
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test
+  build-test-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+      - test:
+          filters:
+            branches:
+              only:
+                - main
+      - deploy:
+          filters:
+            branches:
+              only:
+                - main
+```
+Double check your work with `circleci config validate`
+
+Unfortunately, CircleCI CLI does not allow us to run the workflow like its in `main`, so we will have to "test" by looking at a few examples within CircleCI itself. See *Looking at Existing Production Workflows* for more examples.
+
+#### Sequential Jobs
+
+For deployments, developers will want to make sure certain actions in a certain order. The most common is to make sure the application can build before it gets tested. And that the application is tested before it gets deployed. CircleCI can accommodate this using the `requires` tag. Note, when doing sequential jobs, the time the workflow is active can increase, sometimes incurring cost.
+
+On our build-and-test workflow, modify to match the following: 
+```yml
+  build-and-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+```
+
+If you run the circleci workflow, you will [see something different](https://app.circleci.com/pipelines/github/Shift3/circleci-workshop/46/workflows/558572c5-b6fe-42d3-bc86-60de0a209a0d) than our last couple of workshops. Instead of the build and test jobs doing the same operation at the same time in parallel, now the jobs are both sequential. The build job MUST be successful before the test job is run. 
+
+While this is useful for debugging with developers day-to-day operations, thse operations are required when doing our deployment workflows. When a deployment occurs, the application should be able to build and test itself before pushing to production. By adding Sequential jobs, we ca make sure the application can at least run its build and test jobs before hitting production, reducing the number of bugs overall. It can also be useful when merging from many different developers (it scales). 
+
+Please make the following change to the `build-test-deploy` workflow near the bottom of the config.yml file:
+```yml
+  build-test-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - main
+```
 
 ## Assignment
 1. Take a look at the node boilerplate and how its deployed.
